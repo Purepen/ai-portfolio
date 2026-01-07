@@ -2,10 +2,10 @@
 
 export default function BackgroundPattern() {
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-gray-50">
+    <div className="fixed inset-0 -z-10 overflow-hidden bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
       {/* Dotted pattern */}
       <div 
-        className="absolute inset-0 opacity-40"
+        className="absolute inset-0 opacity-40 dark:opacity-20"
         style={{
           backgroundImage: `radial-gradient(circle, #d1d5db 1px, transparent 1px)`,
           backgroundSize: '24px 24px',
@@ -14,7 +14,7 @@ export default function BackgroundPattern() {
       
       {/* Subtle gradient overlay */}
       <div 
-        className="absolute inset-0 opacity-20"
+        className="absolute inset-0 opacity-20 dark:opacity-30"
         style={{
           background: 'radial-gradient(circle at 30% 20%, rgba(16, 185, 129, 0.15), transparent 50%), radial-gradient(circle at 70% 80%, rgba(251, 191, 36, 0.15), transparent 50%)',
         }}

@@ -6,6 +6,7 @@ import HeroSection from '@/components/HeroSection';
 import TabNavigation from '@/components/TabNavigation';
 import ChatInterface from '@/components/ChatInterface';
 import CVButton from '@/components/CVButton';
+import DarkModeToggle from '@/components/DarkModeToggle';
 import { tabs } from '@/lib/portfolio-data';
 
 export default function Home() {
@@ -28,6 +29,9 @@ export default function Home() {
       
       {/* CV Download Button - Top Left */}
       <CVButton resumeUrl="/resume.pdf" />
+      
+      {/* Dark Mode Toggle - Top Right */}
+      <DarkModeToggle />
       
       <div className="relative z-10 container mx-auto py-8">
         <HeroSection />

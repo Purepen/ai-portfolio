@@ -30,7 +30,7 @@ export default function TabNavigation({ tabs, onTabClick }: TabNavigationProps) 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => onTabClick(tab.prompt)}
-          className="px-6 py-2.5 bg-white text-gray-700 rounded-full shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-emerald-400 font-medium text-sm"
+          className="px-6 py-2.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-full shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-emerald-400 dark:hover:border-emerald-500 font-medium text-sm"
         >
           {tab.label}
         </motion.button>

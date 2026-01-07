@@ -58,8 +58,8 @@ const projects: Project[] = [
     year: '2025',
     category: 'Web',
     status: 'Completed',
-    description: 'Interactive AI-powered portfolio website featuring RAG-based chat interface, dynamic skills/experience/projects displays, and smooth animations built with Next.js and Claude API.',
-    techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Claude Sonnet 4', 'Framer Motion', 'React'],
+    description: 'Interactive AI-powered portfolio website featuring RAG-based chat interface, dynamic skills/experience/projects displays, and smooth animations. Built with Next.js, Claude Sonnet 4, and Vercel AI SDK for intelligent conversational navigation.',
+    techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Claude Sonnet 4', 'Vercel AI SDK', 'Framer Motion'],
     github: 'https://github.com/micheal-olaniyi/ai-portfolio',
     liveDemo: 'https://micheal-olaniyi.vercel.app',
     featured: true
@@ -131,7 +131,7 @@ export default function ProjectsResponse({ onProjectClick }: ProjectsResponsePro
               <div className="flex items-center gap-2 text-sm flex-wrap">
                 <span className="text-gray-600">{project.year}</span>
                 <span className="text-gray-400">•</span>
-                <span className="text-purple-600 font-medium">{project.category}</span>
+                <span className="text-emerald-600 font-medium">{project.category}</span>
                 <span className="text-gray-400">•</span>
                 <span className="px-3 py-1 bg-emerald-500 text-white rounded-full text-xs font-medium">
                   {project.status}
@@ -147,8 +147,8 @@ export default function ProjectsResponse({ onProjectClick }: ProjectsResponsePro
             {/* Tech Stack */}
             <div className="mb-5 flex-1">
               <div className="flex items-start gap-3">
-                {/* Blue accent bar */}
-                <div className="w-1 h-auto bg-gradient-to-b from-emerald-500 to-amber-400 rounded-full mt-1" />
+                {/* Emerald-Amber accent bar - YOUR THEME */}
+                <div className="w-1 h-20 bg-gradient-to-b from-emerald-500 to-amber-400 rounded-full flex-shrink-0" />
                 
                 <div className="flex-1">
                   <p className="text-xs font-semibold text-gray-500 tracking-wider mb-3">

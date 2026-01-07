@@ -20,7 +20,7 @@ export default function MessageBubble({ content, isUser, index }: MessageBubbleP
         className={`max-w-[80%] rounded-2xl px-5 py-3 ${
           isUser
             ? 'bg-gradient-to-r from-emerald-500 to-amber-400 text-white'
-            : 'bg-white text-gray-800 shadow-md border border-gray-100'
+            : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-md border border-gray-100 dark:border-gray-700'
         }`}
       >
         <p className="text-sm leading-relaxed whitespace-pre-wrap">{content}</p>

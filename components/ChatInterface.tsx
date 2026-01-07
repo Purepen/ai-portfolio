@@ -298,7 +298,7 @@ export default function ChatInterface({ initialPrompt }: ChatInterfaceProps) {
             >
               <button
                 onClick={handleClearChat}
-                className="group flex items-center gap-2 px-4 py-2 bg-white hover:bg-red-50 border border-gray-200 hover:border-red-300 rounded-full text-sm font-medium text-gray-600 hover:text-red-600 transition-all duration-200 shadow-sm hover:shadow-md"
+                className="group flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/30 border border-gray-200 dark:border-gray-700 hover:border-red-300 dark:hover:border-red-500 rounded-full text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200 shadow-sm hover:shadow-md"
               >
                 <svg 
                   className="w-4 h-4" 
@@ -322,7 +322,7 @@ export default function ChatInterface({ initialPrompt }: ChatInterfaceProps) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             transition={{ duration: 0.4 }}
-            className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-100 mb-6 overflow-hidden"
+            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 mb-6 overflow-hidden"
           >
           <div className="h-[500px] overflow-y-auto p-6">
             {messages.map((message, index) => (
@@ -369,20 +369,20 @@ export default function ChatInterface({ initialPrompt }: ChatInterfaceProps) {
         onSubmit={handleSubmit}
         className="relative"
       >
-        <div className="flex items-center gap-3 bg-white rounded-full shadow-lg border border-gray-100 px-6 py-4">
+        <div className="flex items-center gap-3 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-100 dark:border-gray-700 px-6 py-4">
           <input
             ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={placeholderMessages[placeholderIndex]}
-            className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-400 transition-all duration-300"
+            className="flex-1 bg-transparent outline-none text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 transition-all duration-300"
             disabled={isLoading}
           />
           
           <button
             type="button"
-            className="p-2 text-gray-400 hover:text-emerald-500 transition-colors"
+            className="p-2 text-gray-400 dark:text-gray-500 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"
             aria-label="Voice input"
           >
             <Mic className="w-5 h-5" />

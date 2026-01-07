@@ -7,13 +7,6 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   color: var(--foreground);
   background: var(--background);
@@ -24,13 +17,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.dark {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - Light Mode */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -45,6 +43,19 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
+  background: #059669;
+}
+
+/* Custom scrollbar - Dark Mode */
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #10b981;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
   background: #059669;
 }
 
