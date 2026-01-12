@@ -1,282 +1,118 @@
+// components/ChatInterface.tsx - WITH CERTIFICATIONS TAB
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Mic } from 'lucide-react';
-import MessageBubble from './MessageBubble';
-import SkillsResponse from './SkillsResponse';
-import ExperienceResponse from './ExperienceResponse';
-import ProjectsResponse from './ProjectsResponse';
-import ContactResponse from './ContactResponse';
+import { useChat } from 'ai/react';
+import { parseResponse } from '@/lib/component-parser';
 import LoadingDots from './LoadingDots';
-import { Message } from '@/lib/types';
-
-interface ChatInterfaceProps {
-  initialPrompt?: string;
-}
+import TabNavigation from './TabNavigation';
 
 const placeholderMessages = [
   "Tell me about yourself and your background?",
   "What are your core skills and technical expertise?",
   "What projects have you worked on?",
   "Tell me about your work experience?",
+  "What certifications do you have?",
   "How can I contact you?"
 ];
 
-export default function ChatInterface({ initialPrompt }: ChatInterfaceProps) {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      role: 'assistant',
-      content: "Greetings, I am Micheal Olaniyi. Feel free to ask about my experience, projects, skills, and more. What would you like to know?",
-      timestamp: new Date(),
-    },
-  ]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+const TAB_QUESTIONS = {
+  intro: "Tell me about yourself and your background?",
+  skills: "What are your core skills and technical expertise?",
+  projects: "What projects have you worked on?",
+  experience: "Tell me about your work experience?",
+  certifications: "What certifications and credentials do you have?",
+  contact: "How can I contact you?"
+};
+
+export default function ChatInterface() {
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
-  // Clear chat function
+  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages, append } = useChat({
+    api: '/api/chat',
+    initialMessages: [
+      {
+        id: '1',
+        role: 'assistant',
+        content: "Greetings, I am Micheal Olaniyi. Feel free to ask about my experience, projects, skills, certifications, and more. What would you like to know?",
+      },
+    ],
+    onResponse: () => {
+      setIsExpanded(true);
+    },
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prev) => (prev + 1) % placeholderMessages.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isLoading]);
+
+
+  ///trial by mike for skills handler
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const customEvent = event as CustomEvent<string>;
+      if (!customEvent.detail) return;
+
+      if (!isExpanded) setIsExpanded(true);
+
+      append({
+        role: 'user',
+        content: customEvent.detail
+      });
+    };
+
+    window.addEventListener('skill-question', handler);
+    return () => {
+      window.removeEventListener('skill-question', handler);
+    };
+  }, [append, isExpanded]);
+///end of trial by mike for skills handler
+
+
+
   const handleClearChat = () => {
     setMessages([
       {
         id: '1',
         role: 'assistant',
-        content: "Greetings, I am Micheal Olaniyi. Feel free to ask about my experience, projects, skills, and more. What would you like to know?",
-        timestamp: new Date(),
+        content: "Greetings, I am Micheal Olaniyi. Feel free to ask about my experience, projects, skills, certifications, and more. What would you like to know?",
       },
     ]);
-    setInput('');
     setIsExpanded(false);
   };
 
-  // Cycle through placeholder messages
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPlaceholderIndex((prev) => (prev + 1) % placeholderMessages.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Handle initial prompt from tab clicks - AUTO SUBMIT
-  useEffect(() => {
-    if (initialPrompt && initialPrompt.trim()) {
-      setInput(initialPrompt);
-      setIsExpanded(true);
-      setTimeout(() => {
-        handleSubmitWithMessage(initialPrompt);
-      }, 100);
-    }
-  }, [initialPrompt]);
-
-  // Auto-scroll to bottom
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isLoading]);
-
-  const handleSkillClick = async (skillName: string) => {
-    const prompt = `Tell me about your experience with ${skillName}`;
-    // DON'T hide skills UI - keep it visible
-    // setShowSkillsUI(false); // REMOVED
+  const handleTabClick = (prompt: string) => {
+    console.log('Tab clicked with prompt:', prompt);
+    if (!isExpanded) setIsExpanded(true);
     
-    // Add user message
-    const userMessage: Message = {
-      id: Date.now().toString(),
+    append({
       role: 'user',
-      content: prompt,
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, userMessage]);
-    setIsLoading(true);
-
-    // Call RAG directly (skip skills UI check)
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          messages: [...messages, userMessage].map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to get response');
-      }
-
-      const data = await response.json();
-      
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: data.message,
-        timestamp: new Date(),
-      };
-
-      setMessages((prev) => [...prev, assistantMessage]);
-    } catch (error) {
-      console.error('Chat error:', error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: "I apologize, but I encountered an error. Please try again.",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
+      content: prompt
+    });
   };
 
-  const handleSubmitWithMessage = async (message: string) => {
-    if (!message.trim() || isLoading) return;
 
-    setIsExpanded(true);
+   
+  // // ✅ NEW: Skill click handler
+  // const handleSkillQuestion = (question: string) => {
+  //   if (!isExpanded) setIsExpanded(true);
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: message.trim(),
-      timestamp: new Date(),
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-    setInput('');
-
-    // Check if asking about skills - EXACT match only
-    const lowerMessage = message.toLowerCase().trim();
-    const isExactSkillsQuestion = 
-      lowerMessage === 'what are your core skills and technical expertise?' ||
-      lowerMessage === 'what are your skills?' ||
-      lowerMessage === 'tell me about your skills';
-    
-    if (isExactSkillsQuestion) {
-      // Add skills UI as a special message type in history
-      const skillsMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: 'SKILLS_UI', // Special marker
-        type: 'skills',
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, skillsMessage]);
-      return; // EXIT HERE - don't continue to API call
-    }
-
-    // Check if asking about experience - EXACT match only
-    const isExactExperienceQuestion =
-      lowerMessage === 'tell me about your work experience?' ||
-      lowerMessage === 'what is your work experience?' ||
-      lowerMessage === 'tell me about your experience';
-    
-    if (isExactExperienceQuestion) {
-      // Add experience UI as a special message type in history
-      const experienceMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: 'EXPERIENCE_UI', // Special marker
-        type: 'experience',
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, experienceMessage]);
-      return; // EXIT HERE - don't continue to API call
-    }
-
-    // Check if asking about projects - EXACT match only
-    const isExactProjectsQuestion =
-      lowerMessage === 'what projects have you worked on?' ||
-      lowerMessage === 'tell me about your projects' ||
-      lowerMessage === 'show me your projects';
-    
-    if (isExactProjectsQuestion) {
-      // Add projects UI as a special message type in history
-      const projectsMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: 'PROJECTS_UI', // Special marker
-        type: 'projects',
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, projectsMessage]);
-      return; // EXIT HERE - don't continue to API call
-    }
-
-    // Check if asking about contact - EXACT match only
-    const isExactContactQuestion =
-      lowerMessage === 'how can i contact you?' ||
-      lowerMessage === 'what is your contact information?' ||
-      lowerMessage === 'how do i reach you?';
-    
-    if (isExactContactQuestion) {
-      // Add contact UI as a special message type in history
-      const contactMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: 'CONTACT_UI', // Special marker
-        type: 'contact',
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, contactMessage]);
-      return; // EXIT HERE - don't continue to API call
-    }
-
-    // If not any special UI question, proceed with normal RAG call
-    setIsLoading(true);
-
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          messages: [...messages, userMessage].map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to get response');
-      }
-
-      const data = await response.json();
-      
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: data.message,
-        timestamp: new Date(),
-      };
-
-      setMessages((prev) => [...prev, assistantMessage]);
-    } catch (error) {
-      console.error('Chat error:', error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: "I apologize, but I encountered an error. Please try again.",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    handleSubmitWithMessage(input);
-  };
+  //   append({
+  //     role: 'user',
+  //     content: question,
+  //   });
+  // };
 
   return (
     <motion.div
@@ -285,10 +121,20 @@ export default function ChatInterface({ initialPrompt }: ChatInterfaceProps) {
       transition={{ duration: 0.5, delay: 0.7 }}
       className="max-w-4xl mx-auto px-4"
     >
-      {/* Chat messages container - only show when expanded */}
+      <TabNavigation 
+        tabs={[
+          { id: 'intro', label: 'Intro', prompt: TAB_QUESTIONS.intro },
+          { id: 'skills', label: 'Skills', prompt: TAB_QUESTIONS.skills },
+          { id: 'projects', label: 'Projects', prompt: TAB_QUESTIONS.projects },
+          { id: 'experience', label: 'Experience', prompt: TAB_QUESTIONS.experience },
+          { id: 'certifications', label: 'Certifications', prompt: TAB_QUESTIONS.certifications },
+          { id: 'contact', label: 'Contact', prompt: TAB_QUESTIONS.contact }
+        ]}
+        onTabClick={handleTabClick}
+      />
+
       {isExpanded && (
         <>
-          {/* Clear Chat Button - only show if more than 1 message */}
           {messages.length > 1 && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -300,18 +146,8 @@ export default function ChatInterface({ initialPrompt }: ChatInterfaceProps) {
                 onClick={handleClearChat}
                 className="group flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/30 border border-gray-200 dark:border-gray-700 hover:border-red-300 dark:hover:border-red-500 rounded-full text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200 shadow-sm hover:shadow-md"
               >
-                <svg 
-                  className="w-4 h-4" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" 
-                  />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
                 Clear Chat
               </button>
@@ -324,62 +160,44 @@ export default function ChatInterface({ initialPrompt }: ChatInterfaceProps) {
             transition={{ duration: 0.4 }}
             className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 mb-6 overflow-hidden"
           >
-          <div className="h-[500px] overflow-y-auto p-6">
-            {messages.map((message, index) => (
-              message.type === 'skills' ? (
-                // Render SkillsResponse for skills type messages
-                <SkillsResponse key={message.id} onSkillClick={handleSkillClick} />
-              ) : message.type === 'experience' ? (
-                // Render ExperienceResponse for experience type messages
-                <ExperienceResponse key={message.id} />
-              ) : message.type === 'projects' ? (
-                // Render ProjectsResponse for projects type messages
-                <ProjectsResponse key={message.id} />
-              ) : message.type === 'contact' ? (
-                // Render ContactResponse for contact type messages
-                <ContactResponse key={message.id} />
-              ) : (
-                // Render normal message bubble
-                <MessageBubble
-                  key={message.id}
-                  content={message.content}
-                  isUser={message.role === 'user'}
-                  index={index}
-                />
-              )
-            ))}
-            
-            {isLoading && (
-              <div className="flex justify-start">
-                <LoadingDots />
-              </div>
-            )}
-            
-            <div ref={messagesEndRef} />
-          </div>
-        </motion.div>
+            <div className="h-[500px] overflow-y-auto p-6">
+              {messages.map((message, index) => 
+                parseResponse(message.content, message.role === 'user', index)
+              )}
+
+              {isLoading && (
+                <div className="flex justify-start">
+                  <LoadingDots />
+                </div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
+          </motion.div>
         </>
       )}
 
-      {/* Input form - always visible */}
       <motion.form
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.8 }}
-        onSubmit={handleSubmit}
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!isExpanded) setIsExpanded(true);
+          handleSubmit(e);
+        }}
         className="relative"
       >
         <div className="flex items-center gap-3 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-100 dark:border-gray-700 px-6 py-4">
           <input
-            ref={inputRef}
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleInputChange}
             placeholder={placeholderMessages[placeholderIndex]}
             className="flex-1 bg-transparent outline-none text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 transition-all duration-300"
             disabled={isLoading}
           />
-          
+
           <button
             type="button"
             className="p-2 text-gray-400 dark:text-gray-500 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"
@@ -387,7 +205,7 @@ export default function ChatInterface({ initialPrompt }: ChatInterfaceProps) {
           >
             <Mic className="w-5 h-5" />
           </button>
-          
+
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
