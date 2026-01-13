@@ -1,4 +1,4 @@
-// components/ChatInterface.tsx - WITH CERTIFICATIONS TAB
+// components/ChatInterface.tsx - FIXED: No spam messages
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -8,6 +8,8 @@ import { useChat } from 'ai/react';
 import { parseResponse } from '@/lib/component-parser';
 import LoadingDots from './LoadingDots';
 import TabNavigation from './TabNavigation';
+
+const MAX_MESSAGES = 10; // Maximum user messages allowed
 
 const placeholderMessages = [
   "Tell me about yourself and your background?",
@@ -27,9 +29,14 @@ const TAB_QUESTIONS = {
   contact: "How can I contact you?"
 };
 
-export default function ChatInterface() {
+interface ChatInterfaceProps {
+  triggerMessage?: string | null;
+}
+
+export default function ChatInterface({ triggerMessage }: ChatInterfaceProps = {}) {
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [lastTrigger, setLastTrigger] = useState<string | null>(null); // ✅ Track last trigger
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages, append } = useChat({
@@ -57,12 +64,17 @@ export default function ChatInterface() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
-
-  ///trial by mike for skills handler
+  // Skill question handler
   useEffect(() => {
     const handler = (event: Event) => {
       const customEvent = event as CustomEvent<string>;
       if (!customEvent.detail) return;
+
+      // Check message limit
+      if (messages.length >= MAX_MESSAGES * 2) {
+        alert("You've reached the message limit (10 messages). Please refresh the page to continue chatting.");
+        return;
+      }
 
       if (!isExpanded) setIsExpanded(true);
 
@@ -76,10 +88,28 @@ export default function ChatInterface() {
     return () => {
       window.removeEventListener('skill-question', handler);
     };
-  }, [append, isExpanded]);
-///end of trial by mike for skills handler
+  }, [append, isExpanded, messages.length]);
 
+  // ✅ FIXED: Trigger message from floating button (only once per unique message)
+  useEffect(() => {
+    if (triggerMessage && triggerMessage !== lastTrigger) {
+      // Check message limit
+      if (messages.length >= MAX_MESSAGES * 2) {
+        alert("You've reached the message limit (10 messages). Please refresh the page to continue chatting.");
+        return;
+      }
 
+      if (!isExpanded) setIsExpanded(true);
+
+      append({
+        role: 'user',
+        content: triggerMessage
+      });
+
+      // Mark this trigger as processed
+      setLastTrigger(triggerMessage);
+    }
+  }, [triggerMessage, append, isExpanded, messages.length, lastTrigger]);
 
   const handleClearChat = () => {
     setMessages([
@@ -90,10 +120,18 @@ export default function ChatInterface() {
       },
     ]);
     setIsExpanded(false);
+    setLastTrigger(null); // ✅ Reset trigger tracking
   };
 
   const handleTabClick = (prompt: string) => {
     console.log('Tab clicked with prompt:', prompt);
+    
+    // Check message limit
+    if (messages.length >= MAX_MESSAGES * 2) {
+      alert("You've reached the message limit (10 messages). Please refresh the page to continue chatting.");
+      return;
+    }
+
     if (!isExpanded) setIsExpanded(true);
     
     append({
@@ -101,18 +139,6 @@ export default function ChatInterface() {
       content: prompt
     });
   };
-
-
-   
-  // // ✅ NEW: Skill click handler
-  // const handleSkillQuestion = (question: string) => {
-  //   if (!isExpanded) setIsExpanded(true);
-
-  //   append({
-  //     role: 'user',
-  //     content: question,
-  //   });
-  // };
 
   return (
     <motion.div
@@ -177,12 +203,33 @@ export default function ChatInterface() {
         </>
       )}
 
+      {/* MESSAGE LIMIT WARNING */}
+      {messages.length >= 16 && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-4 px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl"
+        >
+          <p className="text-sm text-amber-800 dark:text-amber-200 text-center">
+            ⚠️ <strong>{10 - Math.floor(messages.length / 2)}</strong> message{10 - Math.floor(messages.length / 2) !== 1 ? 's' : ''} remaining. 
+            Refresh the page to reset.
+          </p>
+        </motion.div>
+      )}
+
       <motion.form
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.8 }}
         onSubmit={(e) => {
           e.preventDefault();
+          
+          // Check message limit
+          if (messages.length >= MAX_MESSAGES * 2) {
+            alert("You've reached the message limit (10 messages). Please refresh the page to continue chatting.");
+            return;
+          }
+
           if (!isExpanded) setIsExpanded(true);
           handleSubmit(e);
         }}
@@ -195,7 +242,7 @@ export default function ChatInterface() {
             onChange={handleInputChange}
             placeholder={placeholderMessages[placeholderIndex]}
             className="flex-1 bg-transparent outline-none text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 transition-all duration-300"
-            disabled={isLoading}
+            disabled={isLoading || messages.length >= MAX_MESSAGES * 2}
           />
 
           <button
@@ -208,7 +255,7 @@ export default function ChatInterface() {
 
           <button
             type="submit"
-            disabled={!input.trim() || isLoading}
+            disabled={!input.trim() || isLoading || messages.length >= MAX_MESSAGES * 2}
             className="p-3 bg-gradient-to-r from-emerald-500 to-amber-400 text-white rounded-full hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Send message"
           >

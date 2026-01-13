@@ -9,7 +9,7 @@ interface CVButtonProps {
 
 export default function CVButton({ resumeUrl = '/resume.pdf' }: CVButtonProps) {
   return (
-    <div className="fixed top-6 left-6 z-50">
+    <div className="fixed top-20 left-6 z-40">
     <a
         href={resumeUrl}
         download="Micheal_Olaniyi_Resume.pdf"

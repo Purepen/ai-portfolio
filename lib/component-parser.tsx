@@ -1,4 +1,4 @@
-// lib/component-parser.tsx - FIXED: No JSON required
+// lib/component-parser.tsx - WITH CONTACT FORM COMPONENT
 import React from 'react';
 import SkillsResponse from '@/components/SkillsResponse';
 import ProjectsResponse from '@/components/Projectsresponse';
@@ -6,6 +6,7 @@ import ExperienceResponse from '@/components/Experienceresponse';
 import ContactResponse from '@/components/Contactresponse';
 import CertificationsResponse from '@/components/Certificationsresponse';
 import RecommendationsResponse from '@/components/Recommendationsresponse';
+import ContactFormResponse from '@/components/ContactFormResponse';
 import MessageBubble from '@/components/MessageBubble';
 
 export function parseResponse(
@@ -98,6 +99,14 @@ export function parseResponse(
           <RecommendationsResponse 
             key={key}
             filter={filter}
+          />
+        );
+        break;
+
+      case 'contactform':
+        elements.push(
+          <ContactFormResponse 
+            key={key}
           />
         );
         break;

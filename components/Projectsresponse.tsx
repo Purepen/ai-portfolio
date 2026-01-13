@@ -62,18 +62,6 @@ export default function ProjectsResponse({ data, filter }: ProjectsResponseProps
     },
     {
       id: '4',
-      name: 'AI Portfolio (This Site)',
-      year: '2025',
-      category: 'Web',
-      status: 'Completed',
-      description: 'Interactive AI-powered portfolio website featuring RAG-based chat interface, dynamic skills/experience/projects displays, and smooth animations. Built with Next.js, Claude Sonnet 4, and Vercel AI SDK for intelligent conversational navigation.',
-      techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Claude Sonnet 4', 'Vercel AI SDK', 'Framer Motion', 'Supabase Vector'],
-      github: '',
-      liveDemo: 'https://micheal-olaniyi.vercel.app',
-      featured: true
-    },
-    {
-      id: '5',
       name: 'Credit Risk Model',
       year: '2024',
       category: 'Data Science',
@@ -85,7 +73,7 @@ export default function ProjectsResponse({ data, filter }: ProjectsResponseProps
       featured: false
     },
     {
-      id: '6',
+      id: '5',
       name: 'Customer Analytics Dashboard',
       year: '2023',
       category: 'Data Science',
@@ -97,7 +85,7 @@ export default function ProjectsResponse({ data, filter }: ProjectsResponseProps
       featured: false
     },
     {
-      id: '7',
+      id: '6',
       name: 'Loan_application_approval',
       year: '2025',
       category: 'Data Science',
