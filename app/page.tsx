@@ -1,7 +1,7 @@
-// app/page.tsx - FIXED ALIGNMENT
+// app/page.tsx - WITH AUTO-SCROLL ON MESSAGE
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import BackgroundPattern from '@/components/BackgroundPattern';
 import HeroSection from '@/components/HeroSection';
 import ChatInterface from '@/components/ChatInterface';
@@ -11,10 +11,35 @@ import FloatingMessageButton from '@/components/FloatingMessageButton';
 
 export default function Home() {
   const [triggerMessage, setTriggerMessage] = useState<string | null>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
 
   // Scroll to top on page load/refresh
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
+
+  // ✅ AUTO-SCROLL: Listen for chat expansion/messages
+  useEffect(() => {
+    const handleChatActivity = () => {
+      // Small delay to let content render
+      setTimeout(() => {
+        if (chatRef.current) {
+          chatRef.current.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }
+      }, 300);
+    };
+
+    // Listen for custom events from ChatInterface
+    window.addEventListener('chat-expanded', handleChatActivity);
+    window.addEventListener('message-sent', handleChatActivity);
+
+    return () => {
+      window.removeEventListener('chat-expanded', handleChatActivity);
+      window.removeEventListener('message-sent', handleChatActivity);
+    };
   }, []);
 
   const handleQuickMessage = () => {
@@ -24,7 +49,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen relative">
+    <main className="min-h-screen relative overflow-x-hidden">
       <BackgroundPattern />
       
       {/* Floating Message Button - Top Left */}
@@ -38,11 +63,14 @@ export default function Home() {
       {/* Dark Mode Toggle - Top Right (unchanged) */}
       <DarkModeToggle />
       
-      <div className="relative z-10 container mx-auto py-8">
+      {/* Main content with responsive padding */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         <HeroSection />
         
-        {/* ChatInterface with trigger message prop */}
-        <ChatInterface triggerMessage={triggerMessage} />
+        {/* ✅ Ref for auto-scroll target */}
+        <div ref={chatRef}>
+          <ChatInterface triggerMessage={triggerMessage} />
+        </div>
       </div>
     </main>
   );

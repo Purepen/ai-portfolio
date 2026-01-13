@@ -50,6 +50,10 @@ export default function ChatInterface({ triggerMessage }: ChatInterfaceProps = {
     ],
     onResponse: () => {
       setIsExpanded(true);
+      window.dispatchEvent(new Event('chat-expanded')); // ✅ ADDED
+    },
+    onFinish: () => {
+      window.dispatchEvent(new Event('message-sent')); // ✅ ADDED
     },
   });
 

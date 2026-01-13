@@ -1,8 +1,8 @@
-// components/ProjectsResponse.tsx
+// components/ProjectsResponse.tsx - WITH SMOOTH SCROLL TO TOP
 'use client';
 
 import { motion } from 'framer-motion';
-import { ExternalLink, Github } from 'lucide-react';
+import { ExternalLink, Github, ArrowUp } from 'lucide-react';
 
 interface Project {
   id: string;
@@ -97,19 +97,19 @@ export default function ProjectsResponse({ data, filter }: ProjectsResponseProps
       featured: false
     },
     {
-    id: '7',
-    name: 'AI-Powered Portfolio Website',
-    year: '2025',
-    category: 'Full-Stack AI',
-    status: 'Completed',
-    description: 'Interactive AI-powered portfolio featuring RAG-based conversational interface with Claude Sonnet 4, vector search with Supabase, and dynamic component rendering. Visitors can explore projects, skills, experience, and certifications through natural language queries. Includes real-time streaming responses, skill-click automation, and floating animations.',
-    techStack: ['Next.js 15','TypeScript','Tailwind CSS','Claude Sonnet 4','OpenAI Embeddings','Vercel AI SDK','Supabase (PostgreSQL+pg vector)','Framer Motion','Lucide Icons','Edge Runtime','Vercel Deployment'],
-    github: 'https://github.com/micheal-olaniyi/ai-portfolio',
-    liveDemo: 'https://micheal-olaniyi.vercel.app',
-    featured: true
+      id: '7',
+      name: 'AI-Powered Portfolio Website',
+      year: '2025',
+      category: 'Full-Stack AI',
+      status: 'Completed',
+      description: 'Interactive AI-powered portfolio featuring RAG-based conversational interface with Claude Sonnet 4, vector search with Supabase, and dynamic component rendering. Visitors can explore projects, skills, experience, and certifications through natural language queries. Includes real-time streaming responses, skill-click automation, and floating animations.',
+      techStack: ['Next.js 15','TypeScript','Tailwind CSS','Claude Sonnet 4','OpenAI Embeddings','Vercel AI SDK','Supabase (PostgreSQL+pg vector)','Framer Motion','Lucide Icons','Edge Runtime','Vercel Deployment'],
+      github: 'https://github.com/micheal-olaniyi/ai-portfolio',
+      liveDemo: 'SCROLL_TO_TOP', // ✅ Special flag
+      featured: true
     }
-    
   ];
+
   const projects = data?.projects || hardcodedProjects;
 
   const filteredProjects = filter 
@@ -124,6 +124,12 @@ export default function ProjectsResponse({ data, filter }: ProjectsResponseProps
         );
       })
     : projects;
+
+  // ✅ Handler for AI Portfolio button
+  const handleScrollToTop = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <motion.div
@@ -208,16 +214,27 @@ export default function ProjectsResponse({ data, filter }: ProjectsResponseProps
                 </a>
               )}
               
+              {/* ✅ Special handling for AI Portfolio */}
               {project.liveDemo && (
-                <a
-                  href={project.liveDemo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-amber-400 text-white rounded-xl hover:shadow-lg transition-all text-sm font-medium"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Live Demo
-                </a>
+                project.liveDemo === 'SCROLL_TO_TOP' ? (
+                  <button
+                    onClick={handleScrollToTop}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-amber-400 text-white rounded-xl hover:shadow-lg transition-all text-sm font-medium"
+                  >
+                    <ArrowUp className="w-4 h-4" />
+                    You&apos;re Here!
+                  </button>
+                ) : (
+                  <a
+                    href={project.liveDemo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-amber-400 text-white rounded-xl hover:shadow-lg transition-all text-sm font-medium"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    Live Demo
+                  </a>
+                )
               )}
             </div>
           </motion.div>
