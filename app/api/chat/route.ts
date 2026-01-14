@@ -289,7 +289,7 @@ just respond conversationally based on context.
  `;
 
     const result = await streamText({
-      model: anthropic('claude-sonnet-4-20250514'),
+      model: anthropic('claude-3-haiku-20240307'), //claude-sonnet-4-20250514
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages,
