@@ -29,18 +29,40 @@ export async function POST(req: Request) {
 
     const queryEmbedding = embeddingResponse.data[0].embedding;
 
+    console.log('🧮 Embedding generated:', {
+      dimensions: queryEmbedding.length,
+      firstFewValues: queryEmbedding.slice(0, 5),
+      isArray: Array.isArray(queryEmbedding),
+      type: typeof queryEmbedding[0]
+    });
+
     const { data: documents, error } = await supabase.rpc('match_documents', {
-      query_embedding: queryEmbedding,
+      query_embedding: `[${queryEmbedding.join(',')}]`, // Format as PostgreSQL array string
       match_threshold: 0.3,
       match_count: 8,
+    });
+
+    console.log('📊 Supabase response:', {
+      hasError: !!error,
+      error: error,
+      documentsCount: documents?.length || 0,
+      documentsIsArray: Array.isArray(documents),
+      firstDoc: documents?.[0] ? {
+        hasContent: !!documents[0].content,
+        hasMetadata: !!documents[0].metadata,
+        contentPreview: documents[0].content?.substring(0, 50)
+      } : null
     });
 
     if (error) {
       console.error('❌ Supabase search error:', error);
     }
 
-    const context = documents && documents.length > 0
-      ? documents
+    // ✅ Ensure documents is always an array
+    const safeDocuments = documents || [];
+
+    const context = safeDocuments.length > 0
+      ? safeDocuments
           .map((doc: any, idx: number) => {
             const source = doc.metadata?.file_name 
               ? `[Source: ${doc.metadata.file_name}]` 
@@ -50,7 +72,7 @@ export async function POST(req: Request) {
           .join('\n\n---\n\n')
       : 'No specific context found in documents.';
 
-    console.log('📚 Retrieved', documents?.length || 0, 'relevant chunks');
+    console.log('📚 Retrieved', safeDocuments.length, 'relevant chunks');
 
     const systemPrompt = `You are Micheal Olaniyi's AI assistant, helping visitors learn about his background, skills, experience, projects, certifications, and recommendations.
 
@@ -289,7 +311,7 @@ just respond conversationally based on context.
  `;
 
     const result = await streamText({
-      model: anthropic('claude-3-haiku-20240307'), //claude-sonnet-4-20250514
+      model: anthropic('claude-haiku-4-5-20251001'), //claude-sonnet-4-20250514
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages,
