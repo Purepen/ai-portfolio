@@ -55,7 +55,7 @@ export default function ProjectsResponse({ data, filter }: ProjectsResponseProps
       category: 'AI Tools',
       status: 'Completed',
       description: 'Initial version of CFO AI Assistant with foundational RAG capabilities and financial document analysis for Nigerian banking executives.',
-      techStack: ['Python', 'OpenAI GPT-4', 'LangChain', 'FAISS', 'FastAPI'],
+      techStack: ['Python', 'Claude Sonnet 4', 'LangChain', 'ChromaDB', 'Sentence Transformers', 'Streamlit'],
       github: 'https://github.com/Purepen/CFO-ai-assistant',
       liveDemo: 'https://youtu.be/y_JC8nHnf10?si=e02Z6A94i2N5enbH',
       featured: false
@@ -107,6 +107,30 @@ export default function ProjectsResponse({ data, filter }: ProjectsResponseProps
       github: 'https://github.com/micheal-olaniyi/ai-portfolio',
       liveDemo: 'SCROLL_TO_TOP', // ✅ Special flag
       featured: true
+    },
+    {
+      id: '8',
+      name: 'Avatar (Digital Twin)',
+      year: '2026',
+      category: 'AI Tools',
+      status: 'Live',
+      description: 'A conversational digital twin: visitors chat with an AI version of me trained on my real experience, with the option for me to jump into the conversation live from an admin dashboard. Streamed over SSE.',
+      techStack: ['OpenAI Agents SDK', 'FastAPI', 'Supabase', 'TypeScript'],
+      github: 'https://github.com/Purepen/avatar',
+      liveDemo: 'https://purepen.fly.dev',
+      featured: true
+    },
+    {
+      id: '9',
+      name: 'Research AI',
+      year: '2026',
+      category: 'AI Tools',
+      status: 'Live',
+      description: 'A free tool that helps students and professionals get unstuck at the start of a research project: choosing a topic, deriving a clear specification, and finding the right materials.',
+      techStack: ['Python', 'LLM', 'RAG'],
+      github: 'https://github.com/Purepen/research-assistant',
+      liveDemo: '',
+      featured: false
     }
   ];
 

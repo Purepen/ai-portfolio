@@ -37,7 +37,7 @@ const portfolioChunks = [
     metadata: { type: 'project', name: 'CFO AI Assistant v2', year: '2025', category: 'AI Tools', liveDemo: 'https://youtu.be/Hmk_OsMPNt0?si=uNPvtnVGcNOOWSeY', source: 'hardcoded' }
   },
   {
-    content: `CFO AI Assistant v1 (2024) - Initial version of CFO AI Assistant with foundational RAG capabilities and financial document analysis for Nigerian banking executives. Tech Stack: Python, OpenAI GPT-4, LangChain, FAISS, FastAPI. Status: Completed. Category: AI Tools. GitHub: https://github.com/Purepen/CFO-ai-assistant Live Demo: https://youtu.be/y_JC8nHnf10?si=e02Z6A94i2N5enbH Featured: No`,
+    content: `CFO AI Assistant v1 (2024) - Initial version of CFO AI Assistant with foundational RAG capabilities and financial document analysis for Nigerian banking executives. Three agents: SQL for structured financial metrics, RAG over ChromaDB for policy documents, and web search. Tech Stack: Python, Claude Sonnet 4, LangChain, ChromaDB, Sentence Transformers, Streamlit. (v1 never used GPT-4.) Status: Completed. Category: AI Tools. GitHub: https://github.com/Purepen/CFO-ai-assistant Live Demo: https://youtu.be/y_JC8nHnf10?si=e02Z6A94i2N5enbH Featured: No`,
     metadata: { type: 'project', name: 'CFO AI Assistant v1', year: '2024', category: 'AI Tools', github: 'https://github.com/Purepen/CFO-ai-assistant', liveDemo: 'https://youtu.be/y_JC8nHnf10?si=e02Z6A94i2N5enbH', source: 'hardcoded' }
   },
   {
@@ -55,6 +55,14 @@ const portfolioChunks = [
   {
     content: `Loan Application Approval (2025) - Application that analyzes historical loan data and creates a model that predicts whether a loan application should be approved or denied. Tech Stack: sklearn, Matplotlib, plotly, pandas, seaborn. Status: Completed. Category: Data Science. GitHub: https://github.com/Purepen/Loan_application_approval Featured: No`,
     metadata: { type: 'project', name: 'Loan Application Approval', year: '2025', category: 'Data Science', github: 'https://github.com/Purepen/Loan_application_approval', source: 'hardcoded' }
+  },
+  {
+    content: `Avatar - Digital Twin (2026) - A conversational digital twin: visitors chat with an AI version of Micheal trained on his real experience, with the option for him to jump into the conversation live from an admin dashboard. Built with the OpenAI Agents SDK, FastAPI, Supabase and a vanilla TypeScript frontend, streamed over SSE. Status: Live. Category: AI Tools. GitHub: https://github.com/Purepen/avatar Live: https://purepen.fly.dev Featured: Yes`,
+    metadata: { type: 'project', name: 'Avatar (Digital Twin)', year: '2026', category: 'AI Tools', github: 'https://github.com/Purepen/avatar', liveDemo: 'https://purepen.fly.dev', source: 'hardcoded' }
+  },
+  {
+    content: `Research AI (2026) - A free tool that helps students and professionals get unstuck at the start of a research project: choosing a topic, deriving a clear specification, and finding the right materials, so the blank page stops being the hardest part. Tech Stack: Python, LLM, RAG. Status: Live. Category: AI Tools. GitHub: https://github.com/Purepen/research-assistant Featured: No`,
+    metadata: { type: 'project', name: 'Research AI', year: '2026', category: 'AI Tools', github: 'https://github.com/Purepen/research-assistant', source: 'hardcoded' }
   },
   // SKILLS (5 CATEGORIES)
   {
