@@ -19,22 +19,21 @@ const openai = new OpenAI({
 });
 
 // ═══════════════════════════════════════════════════════════════════
-// COMPLETE PORTFOLIO DATA - PRIMARY SOURCE OF TRUTH
-// 39 Rich Chunks: Intro + 6 Projects + 5 Skills + 9 Experience + 14 Certs + Contact + 3 Recommendations
 // ═══════════════════════════════════════════════════════════════════
 
 const portfolioChunks = [
   // INTRO
   {
-    content: `Micheal Olaniyi is an AI/ML Engineer with 4+ years of experience focusing on building intelligent agents that scale, automate, and optimize growth. He specializes in production-ready AI systems, multi-agent applications, and RAG pipelines.`,
+    content: `Micheal Olaniyi (AI/ML Engineer | AI Automation & Data Science | BI/CVM Manager) has 7 years of data science and analytics experience, including 3+ years in fintech/payments, focusing on building intelligent agents that scale, automate, and optimize growth. He specializes in production-ready AI systems, multi-agent applications, and RAG pipelines.`,
     metadata: { type: 'intro', source: 'hardcoded' }
   },
+  // PROJECTS (10 TOTAL)
   {
-    content: `AI Banking Assistant (2025) - Voice-enabled banking system with 8 specialized agents, secure 2FA, real-time processing serving 700+ users. Achieved sub-2-second response times with optimized async processing. Tech Stack: Python, FastAPI, AsyncIO, SQLite, Gradio, OpenAI GPT-4o-mini, Whisper API, TTS-1. Status: Completed. Category: AI Tools. GitHub: https://github.com/micheal-olaniyi/ai-banking-assistant Live Demo: https://youtu.be/Hvwg5XZ3TR0?si=0yA0emdZmZOsc8pX Featured: Yes`,
+    content: `AI Banking Assistant (2025) - Voice-enabled banking system with 8 specialized agents, secure 2FA, real-time processing serving 70+ users. Achieved sub-2-second response times with optimized async processing. Tech Stack: Python, FastAPI, AsyncIO, SQLite, Gradio, OpenAI GPT-4o-mini, Whisper API, TTS-1. Status: Completed. Category: AI Tools. GitHub: https://github.com/micheal-olaniyi/ai-banking-assistant Live Demo: https://youtu.be/Hvwg5XZ3TR0?si=0yA0emdZmZOsc8pX Featured: Yes`,
     metadata: { type: 'project', name: 'AI Banking Assistant', year: '2025', category: 'AI Tools', github: 'https://github.com/micheal-olaniyi/ai-banking-assistant', liveDemo: 'https://youtu.be/Hvwg5XZ3TR0?si=0yA0emdZmZOsc8pX', source: 'hardcoded' }
   },
   {
-    content: `CFO AI Assistant v2 (2025) - Advanced multi-agent financial intelligence system for Nigerian bank CFOs with intelligent query routing and RAG pipeline achieving 95%+ accuracy. Tech Stack: Python, Claude Sonnet 4, LangChain, LangGraph, ChromaDB, Sentence Transformers, FastAPI. Status: Completed. Category: AI Tools. Live Demo: https://youtu.be/Hmk_OsMPNt0?si=uNPvtnVGcNOOWSeY Featured: Yes`,
+    content: `CFO AI Assistant v2 (2025) - Advanced multi-agent financial intelligence system for Nigerian bank CFOs with intelligent query routing, semantic search and RAG pipeline achieving 95%+ accuracy. Tech Stack: Python, Claude Sonnet 4, LangChain, LangGraph, ChromaDB, Sentence Transformers, FastAPI. Status: Completed. Category: AI Tools. Live Demo: https://youtu.be/Hmk_OsMPNt0?si=uNPvtnVGcNOOWSeY Featured: Yes`,
     metadata: { type: 'project', name: 'CFO AI Assistant v2', year: '2025', category: 'AI Tools', liveDemo: 'https://youtu.be/Hmk_OsMPNt0?si=uNPvtnVGcNOOWSeY', source: 'hardcoded' }
   },
   {
@@ -63,7 +62,7 @@ const portfolioChunks = [
     metadata: { type: 'skills', category: 'AI/ML Engineering', source: 'hardcoded' }
   },
   {
-    content: `Data Engineering & Analytics Skills: Python (Advanced - 4+ years production experience), SQL, JavaScript (NodeJS, React), R programming, Power BI, Tableau, Looker, Apache Superset, Excel, Statistical Analysis, A/B Testing, Matplotlib, Seaborn.`,
+    content: `Data Engineering & Analytics Skills: Python (Advanced - 7 years), SQL, JavaScript (NodeJS, React), R programming, Power BI, Tableau, Looker, Apache Superset, Excel, Statistical Analysis, A/B Testing, Matplotlib, Seaborn.`,
     metadata: { type: 'skills', category: 'Data Engineering & Analytics', source: 'hardcoded' }
   },
   {
@@ -75,41 +74,45 @@ const portfolioChunks = [
     metadata: { type: 'skills', category: 'Backend Technologies', source: 'hardcoded' }
   },
   {
-    content: `Deployment & DevOps Skills: Docker, Kubernetes, CI/CD, AWS, GCP, Azure, Digital Ocean, Vercel.`,
+    content: `Deployment & DevOps Skills: Docker, Kubernetes, CI/CD, AWS, GCP, Azure, DigitalOcean, Vercel.`,
     metadata: { type: 'skills', category: 'Deployment & DevOps', source: 'hardcoded' }
   },
 
-  // EXPERIENCE (9 POSITIONS)
+  // EXPERIENCE (10 POSITIONS)
   {
-    content: `Freelance AI/ML Engineer (Aug 2024 - Present, Remote) - Building production-ready AI systems and multi-agent applications. Achievements: Engineered CFO AI Assistant with 95%+ accuracy using advanced RAG pipeline, Deployed AI Banking Assistant serving 700+ customers with secure 2FA, Implemented advanced RAG pipeline with 80% improvement in response precision, Developed real-time voice interaction with sub-2-second processing. Current Position.`,
-    metadata: { type: 'experience', company: 'Freelance', role: 'Freelance AI/ML Engineer', period: '2024-present', source: 'hardcoded' }
+    content: `AI/ML Engineer at Technocrat IT (Feb 2026 - Present, Hybrid). Current Position.`,
+    metadata: { type: 'experience', company: 'Technocrat IT', role: 'AI/ML Engineer', period: '2026-present', source: 'hardcoded' }
   },
   {
-    content: `Business Intelligence/CVM Manager at Smartcash PSB (Apr 2023 - Present, Lagos Nigeria) - Leading customer value management and BI initiatives. Achievements: Achieved 68.9% increase in revenue-earning customers within 6 months, Reduced monthly churn by 30% through data-driven retention strategies, Built Python automation achieving 1,440x efficiency improvement from full-day to sub-minute processing, Designed executive dashboards in Power BI for real-time metrics. Current Position.`,
-    metadata: { type: 'experience', company: 'Smartcash PSB', role: 'Business Intelligence/CVM Manager', period: '2023-present', source: 'hardcoded' }
+    content: `AI/ML Engineer (Freelance/Consultancy) (Aug 2025 - Present, Remote) - Building production-ready AI systems and multi-agent applications. Achievements: Engineered CFO AI Assistant v2 with 95%+ accuracy using advanced RAG pipeline, Deployed AI Banking Assistant serving 70+ users with secure 2FA, Implemented advanced RAG pipeline with 80% improvement in response precision, Developed real-time voice interaction with sub-2-second processing. Current Position.`,
+    metadata: { type: 'experience', company: 'Freelance/Consultancy', role: 'AI/ML Engineer', period: '2025-present', source: 'hardcoded' }
   },
   {
-    content: `Data Analyst at Interswitch Group (Apr 2024 - Jun 2024, Lagos Nigeria) - Collaborated on complex business and payments analytics. Achievements: Designed dashboards in Tableau for payment transaction monitoring, Optimized data pipelines using SQL for faster reporting, Analyzed payment trends to support strategic business decisions.`,
-    metadata: { type: 'experience', company: 'Interswitch Group', role: 'Data Analyst', period: '2024', source: 'hardcoded' }
+    content: `Business Intelligence Analyst/CVM Manager at Smartcash PSB (Airtel Money) (Apr 2023 - May 2026, Lagos Nigeria) - Led customer value management and BI initiatives. Started as lead BI analyst, then moved into the CVM manager role, which was closer to data science than analysis. Achievements: Achieved 68.9% increase in revenue-generating customers within 6 months, Reduced monthly churn by 30% within 6 months through data-driven retention strategies, Built Python settlement/reconciliation automation that cut processing time by 90% (10x faster), Designed executive dashboards in Power BI for real-time metrics.`,
+    metadata: { type: 'experience', company: 'Smartcash PSB (Airtel Money)', role: 'Business Intelligence Analyst/CVM Manager', period: '2023-2026', source: 'hardcoded' }
   },
   {
-    content: `Data Analyst at Mustard (Mar 2023 - Jun 2023, Remote) - Fintech platform focused on financial product analytics. Achievements: Delivered stakeholder presentations improving financial product adoption by 32%, Automated data cleaning with Python cutting prep time by 50%, Created customer segmentation models for targeted marketing.`,
-    metadata: { type: 'experience', company: 'Mustard', role: 'Data Analyst', period: '2023', source: 'hardcoded' }
+    content: `Data Analyst (Apprenticeship) at Interswitch Group (Apr 2024 - Jun 2024, Lagos Nigeria) - Collaborated on complex business and payments analytics. Achievements: Designed dashboards in Tableau for payment transaction monitoring, Optimized data pipelines using SQL for faster reporting, Analyzed payment trends to support strategic business decisions.`,
+    metadata: { type: 'experience', company: 'Interswitch Group', role: 'Data Analyst (Apprenticeship)', period: '2024', source: 'hardcoded' }
   },
   {
-    content: `Data Analyst/Assistant Teacher at JAF College (Jan 2021 - Feb 2023, Abeokuta Nigeria) - Dual role managing student data and teaching mathematics. Achievements: Managed student performance data and academic reporting systems, Taught mathematics to secondary school students, Developed automated grading systems.`,
-    metadata: { type: 'experience', company: 'JAF College', role: 'Data Analyst/Assistant Teacher', period: '2021-2023', source: 'hardcoded' }
+    content: `Data Analyst at Mustard (Mar 2022 - Jun 2023, Remote) - Fintech platform focused on financial product analytics. Achievements: Delivered stakeholder presentations improving financial product adoption by 32%, Automated data cleaning with Python cutting prep time by 50%, Created customer segmentation models for targeted marketing.`,
+    metadata: { type: 'experience', company: 'Mustard', role: 'Data Analyst', period: '2022-2023', source: 'hardcoded' }
   },
   {
-    content: `Data Analyst Intern at PwC Legal Switzerland (Aug 2022 - Dec 2022, Remote) - Virtual internship focused on legal data analysis. Achievements: Analyzed legal case data for pattern recognition, Created visualizations for case outcome predictions.`,
-    metadata: { type: 'experience', company: 'PwC Legal Switzerland', role: 'Data Analyst Intern', period: '2022', source: 'hardcoded' }
+    content: `Data Analyst / Assistant Teacher at JAF College (Jan 2021 - Feb 2023, Abeokuta Nigeria) - Dual role managing student data and teaching mathematics. Achievements: Managed student performance data and academic reporting systems, Taught mathematics to secondary school students, Developed automated grading systems.`,
+    metadata: { type: 'experience', company: 'JAF College', role: 'Data Analyst / Assistant Teacher', period: '2021-2023', source: 'hardcoded' }
   },
   {
-    content: `Data Analyst Intern at Tata Group Mumbai India (Sep 2022 - Dec 2022, Remote) - Virtual internship in business intelligence. Achievements: Performed data analysis on sales and operations data, Created dashboards for business performance tracking.`,
-    metadata: { type: 'experience', company: 'Tata Group Mumbai India', role: 'Data Analyst Intern', period: '2022', source: 'hardcoded' }
+    content: `Data Analyst Virtual Intern at PwC (Aug 2022 - Dec 2022, Virtual) - Virtual internship programme focused on legal data analysis; not an on-site role. Achievements: Analyzed legal case data for pattern recognition, Created visualizations for case outcome predictions.`,
+    metadata: { type: 'experience', company: 'PwC', role: 'Data Analyst Virtual Intern', period: '2022', source: 'hardcoded' }
   },
   {
-    content: `Data Analyst Virtual Intern at Accenture (Nov 2022 - Dec 2022, Remote) - Virtual experience program in data analytics. Achievements: Completed data cleaning and visualization projects, Presented insights to virtual stakeholders.`,
+    content: `Data Analyst Virtual Intern at Tata Group (Sep 2022 - Dec 2022, Virtual) - Virtual internship programme in business intelligence; not an on-site role. Achievements: Performed data analysis on sales and operations data, Created dashboards for business performance tracking.`,
+    metadata: { type: 'experience', company: 'Tata Group', role: 'Data Analyst Virtual Intern', period: '2022', source: 'hardcoded' }
+  },
+  {
+    content: `Data Analyst Virtual Intern at Accenture (Nov 2022 - Dec 2022, Virtual) - Virtual experience programme in data analytics; not an on-site role. Achievements: Completed data cleaning and visualization projects, Presented insights to virtual stakeholders.`,
     metadata: { type: 'experience', company: 'Accenture', role: 'Data Analyst Virtual Intern', period: '2022', source: 'hardcoded' }
   },
   {
@@ -117,7 +120,27 @@ const portfolioChunks = [
     metadata: { type: 'experience', company: 'National Bureau of Statistics Nigeria', role: 'Statistical Officer', period: '2019-2020', source: 'hardcoded' }
   },
 
-  // CERTIFICATIONS (14 TOTAL)
+  // CERTIFICATIONS (19 TOTAL)
+  {
+    content: `Certificate of Recognition: Mentor, 3MTT Mentorship Program Cohort 3 (Data Science, AI & ML track) - Data Science Nigeria, WESOnline & 3MTT (Sep 2026). Over 8 weeks, guided a group of fellows from first principles to two shipped group projects, from churn prediction models to MamaCare, a full ML + GenAI maternal health app deployed live. Write-up: https://micheal.fly.dev/mamacare-mentorship.html Repo: https://github.com/Purepen/Maternal_Health--mentorship--Project`,
+    metadata: { type: 'certification', issuer: 'Data Science Nigeria, WESOnline & 3MTT', date: '2026-09', source: 'hardcoded' }
+  },
+  {
+    content: `AI Engineer Production track: Deploy LLMs & Agents at scale - Udemy (Jul 2026). Deploy AI to AWS, GCP, AZURE, Vercel with MLOps, Bedrock, SageMaker, RAG, Agents, MCP: scalable, secure, observable. Credential:  https://www.udemy.com/certificate/UC-e38dc130-693c-42b6-9ddc-8b2276c480e8/`,
+    metadata: { type: 'certification', issuer: 'Udemy', date: '2026-07', source: 'hardcoded' }
+  },
+  {
+    content: `AI Automation Builder with n8n - Udemy (May 2026). Create agents, voice agents and automation in n8n. Credential: https://drive.google.com/file/d/1wgv8RMhnP-eh8esaemk0_eMJ4XRldaKy/view?usp=drive_link`,
+    metadata: { type: 'certification', issuer: 'Udemy', date: '2026-05', source: 'hardcoded' }
+  },
+  {
+    content: `AI/ML Engineer (consulting project) - AI micro1 Recruiting (May 2026). Completed series of AI engineering screening assessment. Credential: https://drive.google.com/file/d/1840N2x6W5sU9qPtrNfROE0zNLUVNCjQM/view?usp=sharing`,
+    metadata: { type: 'certification', issuer: 'AI micro1 Recruiting', date: '2026-05', source: 'hardcoded' }
+  },
+  {
+    content: `AI Engineer Agentic Track - Udemy (Mar 2026). Completed Agent and MCP course. Credential: https://www.udemy.com/certificate/UC-5dbbd488-f0ec-4d34-b9cb-3799c5108bd0/`,
+    metadata: { type: 'certification', issuer: 'Udemy', date: '2026-03', source: 'hardcoded' }
+  },
   {
     content: `Model Context Protocol (MCP): Hands-On with Agentic AI - LinkedIn Learning (Dec 2025). 55-minute hands-on course covering MCP for building advanced agentic AI systems. Skills: Anthropic Claude, AI Agents, Artificial Intelligence, Model Context Protocol. Credential: https://drive.google.com/file/d/18jGdt5sPcXFx2WXrs31myfmPvzfb2UgD/view?usp=sharing`,
     metadata: { type: 'certification', issuer: 'LinkedIn Learning', date: '2025-12', source: 'hardcoded' }
@@ -139,7 +162,7 @@ const portfolioChunks = [
     metadata: { type: 'certification', issuer: 'Microsoft', date: '2024-12', credentialId: '8B098D6A3FF9E285', source: 'hardcoded' }
   },
   {
-    content: `Applied Data Science Lab - WorldQuant University (Dec 2024). Applied data science methodologies, practical implementations, real-world applications. Skills: Data Science, Python, Machine Learning, Statistical Analysis, Data Analytics. Credential: https://www.credly.com/badges/3d3283e9-195f-4518-9a8f-03fe9c812020/linked_in_profile`,
+    content: `Certificate in Applied Data Science Lab - WorldQuant University (Dec 2024). This is a certificate, not a degree. Applied data science methodologies, practical implementations, real-world applications. Skills: Data Science, Python, Machine Learning, Statistical Analysis, Data Analytics. Credential: https://www.credly.com/badges/3d3283e9-195f-4518-9a8f-03fe9c812020/linked_in_profile`,
     metadata: { type: 'certification', issuer: 'WorldQuant University', date: '2024-12', source: 'hardcoded' }
   },
   {
@@ -175,9 +198,10 @@ const portfolioChunks = [
     metadata: { type: 'certification', issuer: 'Jobberman Nigeria', date: '2022-09', source: 'hardcoded' }
   },
 
+
   // CONTACT
   {
-    content: `Contact: Email purepen1376@gmail.com, Phone +234 703 164 3120, LinkedIn https://linkedin.com/in/micheal-olaniyi, GitHub https://github.com/micheal-olaniyi, Location Lagos State Nigeria.`,
+    content: `Contact: Email purepen1376@gmail.com, Phone +234 703 164 3120, LinkedIn https://linkedin.com/in/micheal-olaniyi, GitHub https://github.com/purepen, Location Lagos State Nigeria.`,
     metadata: { type: 'contact', source: 'hardcoded' }
   },
 
@@ -296,10 +320,10 @@ async function embedDocuments() {
   console.log(`💰 Cost: $${(successCount * 0.00002).toFixed(4)}`);
   console.log('\n📋 Embedded:');
   console.log(`   • 1 Intro`);
-  console.log(`   • 6 Projects (GitHub/Demo links)`);
+  console.log(`   • 9 Projects (GitHub/Demo links)`);
   console.log(`   • 5 Skill Categories`);
-  console.log(`   • 9 Work Experiences`);
-  console.log(`   • 14 Certifications (credential URLs)`);
+  console.log(`   • 10 Work Experiences`);
+  console.log(`   • 19 Certifications (credential URLs)`);
   console.log(`   • 1 Contact Info`);
   console.log(`   • 3 Recommendations`);
   console.log(`   • ${totalChunks - 39} Additional docs (if any)`);

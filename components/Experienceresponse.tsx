@@ -22,35 +22,44 @@ interface ExperienceResponseProps {
 export default function ExperienceResponse({ data, filter }: ExperienceResponseProps) {
   const hardcodedExperiences = [
     {
-      role: 'Freelance AI/ML Engineer',
-      company: 'Freelance',
-      period: 'Aug 2024 - Present',
+      role: 'AI/ML Engineer',
+      company: 'Technocrat IT',
+      period: 'Feb 2026 - Present',
+      location: 'Hybrid',
+      description: '',
+      achievements: [],
+      current: true
+    },
+    {
+      role: 'AI/ML Engineer',
+      company: 'Freelance/Consultancy',
+      period: 'Aug 2025 - Present',
       location: 'Remote',
       description: 'Building production-ready AI systems and multi-agent applications for enterprise clients.',
       achievements: [
-        'Engineered CFO AI Assistant with 95%+ accuracy using advanced RAG pipeline',
-        'Deployed AI Banking Assistant serving 700+ customers with secure 2FA authentication',
+        'Engineered CFO AI Assistant v2 with 95%+ accuracy using advanced RAG pipeline',
+        'Deployed AI Banking Assistant serving 70+ users with secure 2FA authentication',
         'Implemented advanced RAG pipeline with 80% improvement in response precision',
         'Developed real-time voice interaction with sub-2-second processing time'
       ],
       current: true
     },
     {
-      role: 'Business Intelligence/CVM Manager',
-      company: 'Smartcash PSB',
-      period: 'Apr 2023 - Present',
+      role: 'Business Intelligence Analyst/CVM Manager',
+      company: 'Smartcash PSB (Airtel Money)',
+      period: 'Apr 2023 - May 2026',
       location: 'Lagos, Nigeria',
-      description: 'Leading customer value management and business intelligence initiatives.',
+      description: 'Led customer value management and business intelligence initiatives. Started as lead BI analyst, then moved into the CVM manager role, which was closer to data science than analysis.',
       achievements: [
-        'Achieved 68.9% increase in revenue-earning customers within 6 months',
-        'Reduced monthly churn by 30% through data-driven retention strategies',
-        'Built Python automation achieving 1,440x efficiency improvement from full-day to sub-minute processing',
+        'Achieved 68.9% increase in revenue-generating customers within 6 months',
+        'Reduced monthly churn by 30% within 6 months through data-driven retention strategies',
+        'Built Python settlement/reconciliation automation that cut processing time by 90% (10x faster)',
         'Designed executive dashboards in Power BI for real-time business metrics'
       ],
-      current: true
+      current: false
     },
     {
-      role: 'Data Analyst',
+      role: 'Data Analyst (Apprenticeship)',
       company: 'Interswitch Group',
       period: 'Apr 2024 - Jun 2024',
       location: 'Lagos, Nigeria',
@@ -65,7 +74,7 @@ export default function ExperienceResponse({ data, filter }: ExperienceResponseP
     {
       role: 'Data Analyst',
       company: 'Mustard',
-      period: 'Mar 2023 - Jun 2023',
+      period: 'Mar 2022 - Jun 2023',
       location: 'Remote',
       description: 'Fintech platform focused on financial product analytics.',
       achievements: [
@@ -76,7 +85,7 @@ export default function ExperienceResponse({ data, filter }: ExperienceResponseP
       current: false
     },
     {
-      role: 'Data Analyst/Assistant Teacher',
+      role: 'Data Analyst / Assistant Teacher',
       company: 'JAF College',
       period: 'Jan 2021 - Feb 2023',
       location: 'Abeokuta, Nigeria',
@@ -89,11 +98,11 @@ export default function ExperienceResponse({ data, filter }: ExperienceResponseP
       current: false
     },
     {
-      role: 'Data Analyst Intern',
-      company: 'PwC Legal Switzerland',
+      role: 'Data Analyst Virtual Intern',
+      company: 'PwC',
       period: 'Aug 2022 - Dec 2022',
-      location: 'Remote',
-      description: 'Virtual internship focused on legal data analysis.',
+      location: 'Virtual',
+      description: 'Virtual internship programme focused on legal data analysis.',
       achievements: [
         'Analyzed legal case data for pattern recognition',
         'Created visualizations for case outcome predictions'
@@ -101,11 +110,11 @@ export default function ExperienceResponse({ data, filter }: ExperienceResponseP
       current: false
     },
     {
-      role: 'Data Analyst Intern',
-      company: 'Tata Group Mumbai India',
+      role: 'Data Analyst Virtual Intern',
+      company: 'Tata Group',
       period: 'Sep 2022 - Dec 2022',
-      location: 'Remote',
-      description: 'Virtual internship in business intelligence.',
+      location: 'Virtual',
+      description: 'Virtual internship programme in business intelligence.',
       achievements: [
         'Performed data analysis on sales and operations data',
         'Created dashboards for business performance tracking'
@@ -116,8 +125,8 @@ export default function ExperienceResponse({ data, filter }: ExperienceResponseP
       role: 'Data Analyst Virtual Intern',
       company: 'Accenture',
       period: 'Nov 2022 - Dec 2022',
-      location: 'Remote',
-      description: 'Virtual experience program in data analytics.',
+      location: 'Virtual',
+      description: 'Virtual experience programme in data analytics.',
       achievements: [
         'Completed data cleaning and visualization projects',
         'Presented insights to virtual stakeholders'
@@ -214,9 +223,11 @@ export default function ExperienceResponse({ data, filter }: ExperienceResponseP
                 )}
               </div>
 
-              <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">
-                {exp.description}
-              </p>
+              {exp.description && (
+                <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">
+                  {exp.description}
+                </p>
+              )}
 
               {exp.achievements && exp.achievements.length > 0 && (
                 <div>

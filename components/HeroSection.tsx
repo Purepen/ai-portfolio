@@ -73,7 +73,7 @@ export default function HeroSection() {
       >
         <div className="max-w-5xl">
           <div className="text-gray-800 dark:text-gray-100 mb-3 sm:mb-4">
-            AI Engineer focused on building
+            AI/ML Engineer focused on building
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             <span className="text-gray-800 dark:text-gray-100">intelligent agents that</span>
